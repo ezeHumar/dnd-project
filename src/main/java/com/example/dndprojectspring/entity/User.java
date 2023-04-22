@@ -1,4 +1,5 @@
 package com.example.dndprojectspring.entity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,6 +29,7 @@ public class User {
     @Column(name = "active", nullable = false)
     private boolean active;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "campaign_app_user",

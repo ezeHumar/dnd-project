@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/test")
 public class TestResource {
 
-    @GetMapping("/")
+    @GetMapping("")
     public String test(){
         return "Hello, world!!12";
     }

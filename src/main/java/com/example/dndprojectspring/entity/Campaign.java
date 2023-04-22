@@ -1,5 +1,6 @@
 package com.example.dndprojectspring.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
@@ -23,6 +24,7 @@ public class Campaign {
     @Column(name = "title", nullable = false)
     private String title;
 
+    @NotEmpty
     @Column(name = "description", nullable = true)
     private String description;
 
@@ -36,7 +38,6 @@ public class Campaign {
     @Column(name = "is_visible", nullable = false)
     private boolean isVisible = true;
 
-    //    @JsonIgnore
     @ManyToMany(mappedBy = "campaigns")
     private List<User> users = new ArrayList<>();
 
