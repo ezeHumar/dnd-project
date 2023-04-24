@@ -32,9 +32,7 @@ public class CampaignResource {
     @PostMapping
     public Campaign addCampaign(@RequestBody Campaign campaign) {
         try {
-            //TODO: Get user email from authentication
-            String userEmail = campaign.getUsers().get(0).getEmail();
-            return campaignService.add(campaign, userEmail);
+            return campaignService.add(campaign);
         }
         catch(ConstraintViolationException e){
             throw new ValidationException(e);

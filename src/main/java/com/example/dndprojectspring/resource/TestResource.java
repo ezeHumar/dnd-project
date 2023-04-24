@@ -4,6 +4,7 @@ import com.example.dndprojectspring.exception.ForbiddenException;
 import com.example.dndprojectspring.exception.NoContentException;
 import com.example.dndprojectspring.exception.NotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/test")
 public class TestResource {
 
-    @GetMapping("")
+    @PostMapping("")
     public String test(){
         return "Hello, world!!12";
     }

@@ -1,10 +1,10 @@
 package com.example.dndprojectspring.service;
 
+import com.example.dndprojectspring.config.JwtService;
 import com.example.dndprojectspring.entity.Role;
 import com.example.dndprojectspring.entity.User;
 import com.example.dndprojectspring.exception.NotFoundException;
 import com.example.dndprojectspring.repository.UserJpaRepository;
-import com.example.dndprojectspring.config.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,7 +18,7 @@ import java.util.Optional;
 public class UserService {
 
     private UserJpaRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
     private JwtService jwtService;
     private AuthenticationManager authenticationManager;
 
@@ -31,19 +31,20 @@ public class UserService {
     }
 
     public String add(String username, String email, String password) {
-        User user = new User(username, email, password);
+        User user = new User(username, email, passwordEncoder.encode(password));
         user.setRole(Role.USER);
-        user.isActive();
+        user.setActive(true);
         userRepository.save(user);
         String jwtToken = jwtService.generateToken(user);
         return jwtToken;
     }
+
     public String authenticate(String email, String password){
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        email,
-                        password
-                )
+            new UsernamePasswordAuthenticationToken(
+                    email,
+                    password
+            )
         );
 
         User user = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException(null, null));
