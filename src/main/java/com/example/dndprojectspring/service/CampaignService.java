@@ -1,5 +1,7 @@
 package com.example.dndprojectspring.service;
 
+import com.example.dndprojectspring.dao.CampaignDto;
+import com.example.dndprojectspring.dao.CampaignMapper;
 import com.example.dndprojectspring.entity.Campaign;
 import com.example.dndprojectspring.entity.DungeonMaster;
 import com.example.dndprojectspring.entity.User;
@@ -20,21 +22,23 @@ public class CampaignService {
     CampaignJpaRepository campaignRepository;
     DungeonMasterJpaRepository dungeonMasterRepository;
     UserJpaRepository userRepository;
-
     AuthUtils authUtils;
+    CampaignMapper campaignMapper;
 
     @Autowired
     public CampaignService(CampaignJpaRepository campaignRepository,
                            DungeonMasterJpaRepository dungeonMasterRepository,
                            UserJpaRepository userRepository,
-                           AuthUtils authUtils){
+                           AuthUtils authUtils,
+                           CampaignMapper campaignMapper){
         this.campaignRepository = campaignRepository;
         this.dungeonMasterRepository = dungeonMasterRepository;
         this.userRepository = userRepository;
         this.authUtils = authUtils;
+        this.campaignMapper = campaignMapper;
     }
 
-    public Campaign add(@Valid Campaign campaign){
+    public CampaignDto add(@Valid Campaign campaign){
 
         User user = userRepository.findByEmail(
                 authUtils.getAuthenticatedEmail())
@@ -50,7 +54,7 @@ public class CampaignService {
         Campaign addedCampaign = campaignRepository.save(campaign);
         user.addCampaign(addedCampaign);
         userRepository.save(user);
-        return addedCampaign;
+        return campaignMapper.toDto(addedCampaign);
     }
 
     public List<Campaign> listUserCampaigns(){

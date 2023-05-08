@@ -1,5 +1,6 @@
 package com.example.dndprojectspring.resource;
 
+import com.example.dndprojectspring.dao.CampaignDto;
 import com.example.dndprojectspring.entity.Campaign;
 import com.example.dndprojectspring.exception.ValidationException;
 import com.example.dndprojectspring.service.CampaignService;
@@ -30,7 +31,7 @@ public class CampaignResource {
     }
 
     @PostMapping
-    public Campaign addCampaign(@RequestBody Campaign campaign) {
+    public CampaignDto addCampaign(@RequestBody Campaign campaign) {
         try {
             return campaignService.add(campaign);
         }
