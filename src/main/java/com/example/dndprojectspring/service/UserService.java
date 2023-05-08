@@ -1,8 +1,14 @@
 package com.example.dndprojectspring.service;
 
+import com.example.dndprojectspring.config.JwtService;
+import com.example.dndprojectspring.entity.Role;
 import com.example.dndprojectspring.entity.User;
+import com.example.dndprojectspring.exception.NotFoundException;
 import com.example.dndprojectspring.repository.UserJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,21 +17,43 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    private UserJpaRepository userRespository;
+    private UserJpaRepository userRepository;
+    private PasswordEncoder passwordEncoder;
+    private JwtService jwtService;
+    private AuthenticationManager authenticationManager;
 
     @Autowired
-    public UserService(UserJpaRepository userRepository){
-        this.userRespository = userRepository;
+    public UserService(UserJpaRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager){
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
+        this.authenticationManager = authenticationManager;
     }
 
-    public User add(String username, String email, String password) {
-        User user = new User(username, email, password);
-        userRespository.save(user);
-        return user;
+    public String add(String username, String email, String password) {
+        User user = new User(username, email, passwordEncoder.encode(password));
+        user.setRole(Role.USER);
+        user.setActive(true);
+        userRepository.save(user);
+        String jwtToken = jwtService.generateToken(user);
+        return jwtToken;
+    }
+
+    public String authenticate(String email, String password){
+        authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                    email,
+                    password
+            )
+        );
+
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException(null, null));
+        String jwtToken = jwtService.generateToken(user);
+        return jwtToken;
     }
 
     public boolean login(String email, String password) {
-        Optional<User> user = userRespository.findByEmail(email);
+        Optional<User> user = userRepository.findByEmail(email);
 
         if (user.isEmpty()){
             return false;
@@ -41,7 +69,7 @@ public class UserService {
     }
 
     public List<User> getAllUsers(){
-        return userRespository.findAll();
+        return userRepository.findAll();
     }
 
 }

@@ -1,5 +1,6 @@
 package com.example.dndprojectspring.resource;
 
+import com.example.dndprojectspring.dao.CampaignDto;
 import com.example.dndprojectspring.entity.Campaign;
 import com.example.dndprojectspring.exception.ValidationException;
 import com.example.dndprojectspring.service.CampaignService;
@@ -30,11 +31,9 @@ public class CampaignResource {
     }
 
     @PostMapping
-    public Campaign addCampaign(@RequestBody Campaign campaign) {
+    public CampaignDto addCampaign(@RequestBody Campaign campaign) {
         try {
-            //TODO: Get user email from authentication
-            String userEmail = campaign.getUsers().get(0).getEmail();
-            return campaignService.add(campaign, userEmail);
+            return campaignService.add(campaign);
         }
         catch(ConstraintViolationException e){
             throw new ValidationException(e);

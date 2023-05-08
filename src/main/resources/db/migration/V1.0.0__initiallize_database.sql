@@ -1,9 +1,10 @@
 create table app_user(
     app_user_id bigserial primary key,
-    username varchar(255) not null,
-    email varchar(255) not null,
+    username varchar(255) not null unique,
+    email varchar(255) not null unique,
     password varchar(255) not null,
-    active boolean not null
+    active boolean not null,
+    role varchar(50) not null
 );
 
 create table dungeon_master(
