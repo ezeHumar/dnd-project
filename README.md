@@ -1,8 +1,8 @@
 # :dragon_face: DnD Project :dragon_face:
 
 ## Description
-This is an API made with Java and Springboot that allow users to save all the information about a Dungeon and Dragons 
-campaign and keep track of all the sessions.
+This is an API made with Java and Springboot that allow users to save all the information about Dungeon and Dragons 
+campaigns and keep track of all the sessions.
 
 ## Prerequisites
 To work on this project you must have:
